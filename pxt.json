@@ -5,7 +5,8 @@
         "core": "*",
         "radio": "*",
         "microphone": "*",
-        "maqueen_IR": "github:davek61/maqueen_ir#7c4c5032c5b8a365d18d7813d9987ace7b44e71d"
+        "maqueen_IR": "github:davek61/maqueen_ir#7c4c5032c5b8a365d18d7813d9987ace7b44e71d",
+        "neopixel": "github:microsoft/pxt-neopixel#v0.7.5"
     },
     "files": [
         "main.blocks",

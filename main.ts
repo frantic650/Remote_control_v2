@@ -102,6 +102,14 @@ makerbit.onIrDatagram(function () {
             LOADER += 10
         }
         maqueen.servoRun(maqueen.Servos.S1, LOADER)
+    } else if (IR2 == 80) {
+        if (POLICE == 0) {
+            POLICE = 1
+            PAINT(1)
+        } else {
+            POLICE = 0
+            PAINT(LOGO)
+        }
     } else {
     	
     }
@@ -109,20 +117,58 @@ makerbit.onIrDatagram(function () {
 function PAINT (FACE: number) {
     if (FACE == 0) {
         basic.clearScreen()
+    } else if (FACE == 1) {
+        basic.showLeds(`
+            . . # . .
+            # . . . #
+            . # # # .
+            # . . . #
+            # # # # #
+            `)
     }
 }
 let IR2 = 0
+let LOGO = 0
 let LOADER = 0
 let DIRECT = 0
 let T_MODE = 0
 let B_F = 0
 let SPEED = 0
+let POLICE = 0
 makerbit.connectIrReceiver(DigitalPin.P16, IrProtocol.Keyestudio)
+let LEDKY = neopixel.create(DigitalPin.P15, 4, NeoPixelMode.RGB)
+let LED_FL = LEDKY.range(0, 0)
+let LED_FR = LEDKY.range(3, 0)
+let LED_BL = LEDKY.range(1, 0)
+let LED_BR = LEDKY.range(2, 0)
+POLICE = 0
 SPEED = 5
 B_F = 1
 T_MODE = 1
 DIRECT = 0
 LOADER = 70
-let LOGO = 0
+LOGO = 0
 PAINT(LOGO)
 maqueen.servoRun(maqueen.Servos.S1, LOADER)
+music.setVolume(43)
+basic.forever(function () {
+    if (POLICE == 0) {
+        LEDKY.clear()
+        music.stopAllSounds()
+        LEDKY.clear()
+    } else if (POLICE == 1) {
+        LED_FL.showColor(neopixel.colors(NeoPixelColors.Blue))
+        LED_FR.showColor(neopixel.colors(NeoPixelColors.Blue))
+        LED_BL.showColor(neopixel.colors(NeoPixelColors.Red))
+        LED_BR.showColor(neopixel.colors(NeoPixelColors.Red))
+        music.playTone(330, music.beat(BeatFraction.Quarter))
+        POLICE = 2
+    } else if (POLICE == 2) {
+        LED_FL.showColor(neopixel.colors(NeoPixelColors.Red))
+        LED_FR.showColor(neopixel.colors(NeoPixelColors.Red))
+        LED_BL.showColor(neopixel.colors(NeoPixelColors.Blue))
+        LED_BR.showColor(neopixel.colors(NeoPixelColors.Blue))
+        music.playTone(440, music.beat(BeatFraction.Quarter))
+        POLICE = 1
+    }
+})
